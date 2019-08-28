@@ -19,7 +19,7 @@ class WeatherInfo extends Component {
   };
 
   componentDidMount() {
-    // this.props.postLocation(this.state.location);
+    this.props.postLocation(this.state.location);
   }
 
   componentDidUpdate(prevProps) {
