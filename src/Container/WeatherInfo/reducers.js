@@ -1,7 +1,7 @@
 import * as types from './constants';
 import produce from 'immer';
 
-const initialState = {
+export const initialState = {
   loading: false,
   success: false,
   response: {},

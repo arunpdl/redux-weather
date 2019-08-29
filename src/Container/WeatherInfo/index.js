@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { postLocationRequest } from './actions';
+import {
+  getSuccessResponse,
+  getErrorResponse,
+  getLoadingStatus,
+  getSuccessStatus,
+} from './selectors';
 
-const mapStateToProps = state => ({
-  ...state,
+const mapStateToProps = createStructuredSelector({
+  successResponse: getSuccessResponse(),
+  errorResponse: getErrorResponse(),
+  loading: getLoadingStatus(),
+  success: getSuccessStatus(),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -16,6 +26,7 @@ class WeatherInfo extends Component {
     weather: '',
     stats: {},
     wind: {},
+    errorMessage: '',
   };
 
   componentDidMount() {
@@ -23,22 +34,29 @@ class WeatherInfo extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.weatherInfo !== this.props.weatherInfo) {
-      if (
-        this.props.weatherInfo.response &&
-        Object.keys(this.props.weatherInfo.response).length > 0
-      ) {
+    if (prevProps.successResponse !== this.props.successResponse) {
+      if (Object.keys(this.props.successResponse).length > 0) {
         this.setState({
-          weather:
-            this.props.weatherInfo.response &&
-            this.props.weatherInfo.response.weather[0].main,
-          stats:
-            this.props.weatherInfo.response &&
-            this.props.weatherInfo.response.main,
-          wind:
-            this.props.weatherInfo.response &&
-            this.props.weatherInfo.response.wind,
+          weather: this.props.successResponse.weather[0].main,
+          stats: this.props.successResponse.main,
+          wind: this.props.successResponse.wind,
         });
+      } else {
+        this.setState({
+          weather: '',
+          stats: {},
+          wind: {},
+        });
+      }
+    }
+
+    if (prevProps.errorResponse !== this.props.errorResponse) {
+      if (Object.keys(this.props.errorResponse).length > 0) {
+        this.setState({
+          errorMessage: this.props.errorResponse.message,
+        });
+      } else {
+        this.setState({ errorMessage: '' });
       }
     }
   }
@@ -57,8 +75,8 @@ class WeatherInfo extends Component {
   };
 
   render() {
-    const { location, weather, stats, wind } = this.state;
-    console.log('>>>', weather, stats, wind);
+    const { location, weather, stats, wind, errorMessage } = this.state;
+    const { loading, success } = this.props;
     return (
       <React.Fragment>
         <div>Enter a location</div>
@@ -68,32 +86,43 @@ class WeatherInfo extends Component {
           value={location}
           onChange={this.handleLocationChange}
         />
-        <button type="submit" onClick={this.handleSubmit} disabled={!location}>
+        <button
+          type="submit"
+          onClick={this.handleSubmit}
+          disabled={!location || loading}
+        >
           Get weather
         </button>
         <hr />
-        {weather && (
-          <div>
-            <b>Weather Status: </b>
-            {weather}
-          </div>
+        {!loading && success && (
+          <React.Fragment>
+            {weather && (
+              <div>
+                <b>Weather Status: </b>
+                {weather}
+              </div>
+            )}
+            <hr />
+            {wind && (
+              <div>
+                <b>Wind Status:</b>
+                <p>Degrees: {wind.deg} degrees</p>
+                <p>Speed: {wind.speed} km/hr</p>
+              </div>
+            )}
+            <hr />
+            {stats && (
+              <div>
+                <b>Temperature: {stats.temp} F</b> <b>Max: {stats.temp_max}F</b>{' '}
+                <b>Min: {stats.temp_min} F</b>{' '}
+                <p>Pressure: {stats.pressure} Pa</p>
+                <p>Humidity: {stats.humidity}</p>
+              </div>
+            )}
+          </React.Fragment>
         )}
-        <hr />
-        {wind && (
-          <div>
-            <b>Wind Status:</b>
-            <p>Degrees: {wind.deg} degrees</p>
-            <p>Speed: {wind.speed} km/hr</p>
-          </div>
-        )}
-        <hr />
-        {stats && (
-          <div>
-            <b>Temperature: {stats.temp} F</b> <b>Max: {stats.temp_max}F</b>{' '}
-            <b>Min: {stats.temp_min} F</b> <p>Pressure: {stats.pressure} Pa</p>
-            <p>Humidity: {stats.humidity}</p>
-          </div>
-        )}
+        {loading && <div>Loading...</div>}
+        {errorMessage && !loading && <div>{errorMessage}</div>}
       </React.Fragment>
     );
   }
