@@ -21,7 +21,7 @@ function App() {
       <section className="main">
         <Headline header="Posts" desc="Click to get posts!" tempArr={tempArr} />
       </section>
-      {/* <WeatherInfo /> */}
+      <WeatherInfo />
     </div>
   );
 }

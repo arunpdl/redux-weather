@@ -18,14 +18,9 @@
     "css-loader": "2.1.1",
     "dotenv": "6.2.0",
     "dotenv-expand": "4.2.0",
-    "eslint": "^6.1.0",
     "eslint-config-react-app": "^5.0.1",
     "eslint-loader": "2.2.1",
     "eslint-plugin-flowtype": "3.13.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-jsx-a11y": "6.2.3",
-    "eslint-plugin-react": "7.14.3",
-    "eslint-plugin-react-hooks": "^1.6.1",
     "file-loader": "3.0.1",
     "fs-extra": "7.0.1",
     "html-webpack-plugin": "4.0.0-beta.5",
@@ -114,6 +109,10 @@
       "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
       "^.+\\.module\\.(css|sass|scss)$"
     ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ],
     "modulePaths": [],
     "moduleNameMapper": {
       "^react-native$": "react-native-web",
@@ -142,10 +141,18 @@
     ]
   },
   "devDependencies": {
+    "@redux-saga/testing-utils": "^1.0.5",
     "check-prop-types": "^1.1.2",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-react": "^7.14.3",
+    "eslint-plugin-react-hooks": "^1.7.0",
     "jest-enzyme": "^7.1.0",
-    "redux-devtools-extension": "^2.13.8"
+    "redux-devtools-extension": "^2.13.8",
+    "redux-mock-store": "^1.5.3"
   }
 }
