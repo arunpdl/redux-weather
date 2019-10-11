@@ -3,7 +3,11 @@ import { shallow } from 'enzyme';
 import { checkProps, findByTestAttr } from '../../../test-utils';
 import WeatherInfo from '../index';
 
-describe('WeatherInfo Component', () => {
+const setUp = (initialState = {}) => {
+  const testStore = configureStore;
+};
+
+describe('WeatherInfo Container', () => {
   describe('Checking prop-types', () => {
     it('should not throw a warning', () => {
       const expectedProps = {
