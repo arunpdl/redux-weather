@@ -4,7 +4,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './rootReducer';
 import rootSaga from './rootSaga';
 
-const sagaMiddleware = createSagaMiddleware();
+export const sagaMiddleware = createSagaMiddleware();
 
 export default function configureStore(initialState = {}) {
   const store = createStore(

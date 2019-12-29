@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
+import PropTypes from 'prop-types';
 import { postLocationRequest } from './actions';
 import {
   getSuccessResponse,
@@ -8,6 +9,7 @@ import {
   getLoadingStatus,
   getSuccessStatus,
 } from './selectors';
+import Button from 'Component/Button';
 
 const mapStateToProps = createStructuredSelector({
   successResponse: getSuccessResponse(),
@@ -86,13 +88,11 @@ class WeatherInfo extends Component {
           value={location}
           onChange={this.handleLocationChange}
         />
-        <button
-          type="submit"
-          onClick={this.handleSubmit}
+        <Button
+          handleSubmit={this.handleSubmit}
           disabled={!location || loading}
-        >
-          Get weather
-        </button>
+          text={'Get weather'}
+        />
         <hr />
         {!loading && success && (
           <React.Fragment>
@@ -127,6 +127,13 @@ class WeatherInfo extends Component {
     );
   }
 }
+
+WeatherInfo.propTypes = {
+  successResponse: PropTypes.object,
+  errorResponse: PropTypes.object,
+  loading: PropTypes.bool,
+  success: PropTypes.bool,
+};
 
 export default connect(
   mapStateToProps,
